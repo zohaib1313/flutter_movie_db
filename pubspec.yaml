@@ -46,27 +46,21 @@ dependencies:
 
   # Code Generation for Floor DB
   sqflite: ^2.3.2
-  path_provider: ^2.1.2
-  path: ^1.9.0
+  youtube_player_flutter: ^9.1.1
 
 
   # JSON Serialization & Models
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
 
-  # Routing
-  go_router: ^13.2.0
+
 
   # UI Utils
   flutter_screenutil: ^5.9.0
   cached_network_image: ^3.3.1
   google_fonts: ^6.2.1
 
-  # Animations
-  flutter_animate: ^4.5.0
 
-  # Dev Tools (Optional)
-  logger: ^2.1.0
 
 dev_dependencies:
   flutter_test:

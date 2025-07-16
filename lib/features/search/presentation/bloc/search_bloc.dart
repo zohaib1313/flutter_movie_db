@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../movies/data/repositories/movie_repository.dart';
+import '../../../movies/data/repositories/movie_repository.dart';
 import 'search_event.dart';
 import 'search_state.dart';
 

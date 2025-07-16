@@ -17,5 +17,17 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
         emit(MovieDetailError('Failed to load details'));
       }
     });
+
+    on<LoadMovieTrailer>((event, emit) async {
+      try {
+        final current = state;
+        emit(MovieDetailLoading());
+        final youtubeKey = await repository.fetchMovieTrailer(event.movieId);
+        emit(TrailerLoaded(youtubeKey));
+        emit(MovieDetailLoaded((current as MovieDetailLoaded).movie));
+      } catch (e) {
+        emit(MovieDetailError('Failed to load trailer'));
+      }
+    });
   }
 }

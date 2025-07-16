@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_booking_app/core/theme/app_colors.dart';
 
-import '../../../search/bloc/search_bloc.dart';
-import '../../../search/presentation/search_screen.dart';
+import '../../../search/presentation/bloc/search_bloc.dart';
+import '../../../search/presentation/screens/search_screen.dart';
 import '../../data/repositories/movie_repository.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';

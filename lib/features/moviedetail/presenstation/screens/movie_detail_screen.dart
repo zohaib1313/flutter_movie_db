@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movie_booking_app/core/theme/app_colors.dart';
+import 'package:movie_booking_app/features/trailer/presentation/screens/movie_trailer_screen.dart';
 
 import '../bloc/movie_detail_bloc.dart';
 import '../bloc/movie_detail_event.dart';
@@ -13,12 +15,28 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
     return BlocProvider(
       create: (_) =>
           MovieDetailBloc(context.read())..add(LoadMovieDetail(movieId)),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF7F7F7),
-        body: BlocBuilder<MovieDetailBloc, MovieDetailState>(
+        backgroundColor: colorScheme.background,
+        body: BlocConsumer<MovieDetailBloc, MovieDetailState>(
+          listener: (context, state) {
+            if (state is TrailerLoaded) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return FullScreenTrailerPlayerScreen(
+                      youtubeKey: state.youtubeKey,
+                    );
+                  },
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             if (state is MovieDetailLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -36,170 +54,172 @@ class MovieDetailScreen extends StatelessWidget {
                           ),
                           child: Image.network(
                             'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                            height: 420.h,
+                            height: 340.h,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 24.w,
-                            vertical: 16.h,
+                        Positioned(
+                          top: 48.h,
+                          left: 16.w,
+                          child: CircleAvatar(
+                            backgroundColor: AppColors.light.withOpacity(0.7),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: AppColors.dark,
+                              ),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.white.withOpacity(
-                                      0.7,
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.arrow_back,
-                                        color: Colors.black,
-                                      ),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                    ),
+                        ),
+                        Positioned(
+                          top: 56.h,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Text(
+                              'Watch',
+                              style: textTheme.headlineLarge?.copyWith(
+                                color: AppColors.light,
+                                fontSize: 20.h,
+                                fontWeight: FontWeight.bold,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 8,
+                                    color: Colors.black.withOpacity(0.5),
+                                    offset: const Offset(0, 2),
                                   ),
-                                  const Spacer(),
-                                  Text(
-                                    'Watch',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 8,
-                                          color: Colors.black.withOpacity(0.5),
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(flex: 2),
                                 ],
                               ),
-                              SizedBox(height: 80.h),
-                              Center(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      movie.title,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        shadows: [
-                                          Shadow(
-                                            blurRadius: 8,
-                                            color: Colors.black54,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24.0.w,
+                              vertical: 16.h,
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  movie.title,
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.headlineLarge?.copyWith(
+                                    color: AppColors.light,
+                                    fontSize: 24.h,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 8,
+                                        color: Colors.black54,
+                                        offset: Offset(0, 2),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'In Theaters ${movie.releaseDate}',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        shadows: [
-                                          Shadow(
-                                            blurRadius: 8,
-                                            color: Colors.black54,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF5DB9F6,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          // Navigate to booking screen
-                                        },
-                                        child: const Text(
-                                          'Get Tickets',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: OutlinedButton.icon(
-                                        style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(
-                                            color: Color(0xFF5DB9F6),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          // Watch trailer
-                                        },
-                                        icon: const Icon(
-                                          Icons.play_arrow,
-                                          color: Color(0xFF5DB9F6),
-                                        ),
-                                        label: const Text(
-                                          'Watch Trailer',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Color(0xFF5DB9F6),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 8.h),
+                                Text(
+                                  'In Theaters ${movie.releaseDate}',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.light,
+                                    fontSize: 16.h,
+                                    fontWeight: FontWeight.w400,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 8.r,
+                                        color: Colors.black54,
+                                        offset: Offset(0, 2.h),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 20.h),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 16.h,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      // Navigate to booking screen
+                                    },
+                                    child: Text(
+                                      'Get Tickets',
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        fontSize: 18.h,
+                                        color: AppColors.light,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                        color: AppColors.blue,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 16.h,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      // Dispatch event to load trailer
+                                      context.read<MovieDetailBloc>().add(
+                                        LoadMovieTrailer(movie.id),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.play_arrow,
+                                      color: AppColors.blue,
+                                      size: 24.h,
+                                    ),
+                                    label: Text(
+                                      'Watch Trailer',
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        fontSize: 18.h,
+                                        color: AppColors.blue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 16,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0.w,
+                        vertical: 16.h,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          color: AppColors.light,
+                          borderRadius: BorderRadius.circular(24.r),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.05),
@@ -213,58 +233,57 @@ class MovieDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Genres',
-                                style: TextStyle(
-                                  fontSize: 18,
+                                style: textTheme.headlineLarge?.copyWith(
+                                  fontSize: 18.h,
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.dark,
                                 ),
                               ),
                               const SizedBox(height: 12),
                               Wrap(
-                                spacing: 8,
+                                spacing: 10,
+                                runSpacing: 8,
                                 children:
                                     [
-                                      'thriller',
-                                      'action',
                                       'science',
+                                      'thriller',
                                       'fiction',
+                                      'action',
                                     ].map<Widget>((genre) {
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 6,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: _genreColor(genre),
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: Text(
+                                      final color = _genreColor(genre);
+                                      return Chip(
+                                        label: Text(
                                           genre,
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          style: textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.light,
                                             fontWeight: FontWeight.w500,
                                           ),
+                                        ),
+                                        backgroundColor: color,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 4,
                                         ),
                                       );
                                     }).toList(),
                               ),
                               const SizedBox(height: 24),
-                              const Text(
+                              Text(
                                 'Overview',
-                                style: TextStyle(
-                                  fontSize: 18,
+                                style: textTheme.headlineLarge?.copyWith(
+                                  fontSize: 18.h,
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.dark,
                                 ),
                               ),
                               const SizedBox(height: 12),
                               Text(
                                 movie.overview,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xFF444444),
+                                style: textTheme.bodyMedium?.copyWith(
+                                  fontSize: 15.h,
+                                  color: AppColors.grey,
                                 ),
                               ),
                             ],

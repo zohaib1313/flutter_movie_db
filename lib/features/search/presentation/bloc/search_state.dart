@@ -1,4 +1,4 @@
-import '../../movies/data/models/movie.dart';
+import '../../../movies/data/models/movie.dart';
 
 abstract class SearchState {}
 

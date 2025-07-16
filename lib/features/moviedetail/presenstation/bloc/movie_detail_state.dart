@@ -13,3 +13,8 @@ class MovieDetailError extends MovieDetailState {
   final String message;
   MovieDetailError(this.message);
 }
+
+class TrailerLoaded extends MovieDetailState {
+  final String youtubeKey;
+  TrailerLoaded(this.youtubeKey);
+}

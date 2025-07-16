@@ -9,7 +9,7 @@ class FigmaStyledBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 70.h,
+      height: 100.h,
       decoration: BoxDecoration(
         color: AppColors.grey,
         borderRadius: BorderRadius.only(
@@ -47,14 +47,14 @@ class FigmaStyledBottomNavBar extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 24.sp,
+          size: 24.h,
           color: isSelected ? AppColors.light : Colors.grey,
         ),
         SizedBox(height: 4.h),
         Text(
           label,
           style: TextStyle(
-            fontSize: 12.sp,
+            fontSize: 12.h,
             color: isSelected ? AppColors.light : Colors.grey,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),

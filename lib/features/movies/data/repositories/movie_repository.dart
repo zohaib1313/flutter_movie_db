@@ -85,4 +85,32 @@ class MovieRepository {
       throw Exception('Error fetching movie details: $e');
     }
   }
+
+  Future<String> fetchMovieTrailer(int movieId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.themoviedb.org/3/movie/$movieId/videos',
+        queryParameters: {'api_key': _apiKey},
+      );
+
+      if (response.statusCode == 200) {
+        final List results = response.data['results'];
+
+        final trailer = results.firstWhere(
+          (video) => video['type'] == 'Trailer' && video['site'] == 'YouTube',
+          orElse: () => null,
+        );
+
+        if (trailer != null) {
+          return trailer['key']; // YouTube video ID
+        } else {
+          throw Exception("No YouTube trailer found");
+        }
+      } else {
+        throw Exception('Failed to fetch trailer');
+      }
+    } catch (e) {
+      throw Exception('Error fetching trailer: $e');
+    }
+  }
 }
