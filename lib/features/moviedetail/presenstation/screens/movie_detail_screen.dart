@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_booking_app/core/theme/app_colors.dart';
-import 'package:movie_booking_app/features/trailer/presentation/screens/movie_trailer_screen.dart';
+import 'package:movie_booking_app/features/moviedetail/presenstation/screens/movie_trailer_screen.dart';
+import 'package:movie_booking_app/features/moviedetail/presenstation/screens/seat_selection_screen.dart';
 
 import '../bloc/movie_detail_bloc.dart';
 import '../bloc/movie_detail_event.dart';
@@ -155,7 +156,12 @@ class MovieDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                     onPressed: () {
-                                      // Navigate to booking screen
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SeatSelectionScreen(),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       'Get Tickets',
@@ -192,14 +198,14 @@ class MovieDetailScreen extends StatelessWidget {
                                     },
                                     icon: Icon(
                                       Icons.play_arrow,
-                                      color: AppColors.blue,
+                                      color: AppColors.light,
                                       size: 24.h,
                                     ),
                                     label: Text(
                                       'Watch Trailer',
                                       style: textTheme.bodyMedium?.copyWith(
                                         fontSize: 18.h,
-                                        color: AppColors.blue,
+                                        color: AppColors.light,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
