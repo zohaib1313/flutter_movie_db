@@ -80,7 +80,7 @@ class _$AppDatabase extends AppDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -143,6 +143,18 @@ class _$MovieDao extends MovieDao {
             posterPath: row['posterPath'] as String,
             overview: row['overview'] as String,
             releaseDate: row['releaseDate'] as String));
+  }
+
+  @override
+  Future<List<Movie>> searchMovies(String query) async {
+    return _queryAdapter.queryList('SELECT * FROM movies WHERE title LIKE ?1',
+        mapper: (Map<String, Object?> row) => Movie(
+            id: row['id'] as int,
+            title: row['title'] as String,
+            posterPath: row['posterPath'] as String,
+            overview: row['overview'] as String,
+            releaseDate: row['releaseDate'] as String),
+        arguments: [query]);
   }
 
   @override

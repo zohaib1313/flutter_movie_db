@@ -40,4 +40,32 @@ class MovieRepository {
       }
     }
   }
+
+  Future<List<Movie>> searchMovies(String query) async {
+    try {
+      final localResults = await db.movieDao.searchMovies('%$query%');
+
+      if (localResults.isNotEmpty) return localResults;
+
+      final response = await _dio.get(
+        'https://api.themoviedb.org/3/search/movie',
+        queryParameters: {'query': query, 'api_key': _apiKey, 'page': 1},
+      );
+
+      print(response);
+      if (response.statusCode == 200) {
+        final List<Movie> remoteResults = (response.data['results'] as List)
+            .map((json) => Movie.fromJson(json))
+            .toList();
+
+        await db.movieDao.insertMovies(remoteResults);
+
+        return remoteResults;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      throw Exception('Search failed: $e');
+    }
+  }
 }

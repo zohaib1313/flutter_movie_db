@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_booking_app/core/theme/app_colors.dart';
 
+import '../../../search/bloc/search_bloc.dart';
+import '../../../search/presentation/search_screen.dart';
+import '../../data/repositories/movie_repository.dart';
 import '../bloc/movie_bloc.dart';
 import '../bloc/movie_event.dart';
 import '../bloc/movie_state.dart';
@@ -84,7 +87,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 fontSize: 16.sp,
                               ),
                         ),
-                        Icon(Icons.search),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (_) => SearchBloc(
+                                    RepositoryProvider.of<MovieRepository>(
+                                      context,
+                                    ),
+                                  ),
+                                  child: const SearchScreen(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Icon(Icons.search),
+                        ),
                       ],
                     ),
                   ),

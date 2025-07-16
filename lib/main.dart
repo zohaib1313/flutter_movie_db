@@ -13,18 +13,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = await $FloorAppDatabase.databaseBuilder('app.db').build();
   final repo = MovieRepository(database);
-
-  runApp(MovieApp(repository: repo));
+  runApp(
+    RepositoryProvider<MovieRepository>.value(
+      value: repo,
+      child: MovieApp(repository: repo),
+    ),
+  );
 }
 
 class MovieApp extends StatelessWidget {
   final MovieRepository repository;
+
   const MovieApp({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Figma reference size
+      designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, __) => MaterialApp(
