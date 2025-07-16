@@ -7,7 +7,7 @@ import 'core/theme/app_theme.dart';
 import 'features/movies/data/repositories/movie_repository.dart';
 import 'features/movies/presentation/bloc/movie_bloc.dart';
 import 'features/movies/presentation/bloc/movie_event.dart';
-import 'features/movies/presentation/screens/dashboard_screen.dart';
+import 'features/movies/presentation/screens/movies_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class MovieApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         home: BlocProvider(
           create: (_) => MovieBloc(repository)..add(LoadMovies()),
-          child: const DashboardScreen(),
+          child: const MovieListScreen(),
         ),
       ),
     );

@@ -68,4 +68,21 @@ class MovieRepository {
       throw Exception('Search failed: $e');
     }
   }
+
+  Future<Movie> fetchMovieDetail(int movieId) async {
+    try {
+      final response = await _dio.get(
+        'https://api.themoviedb.org/3/movie/$movieId',
+        queryParameters: {'api_key': _apiKey},
+      );
+
+      if (response.statusCode == 200) {
+        return Movie.fromJson(response.data);
+      } else {
+        throw Exception('Failed to load movie details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching movie details: $e');
+    }
+  }
 }

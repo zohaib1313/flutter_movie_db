@@ -12,14 +12,14 @@ import '../bloc/movie_state.dart';
 import '../widgets/bottom_bar.dart';
 import '../widgets/movie_card.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class MovieListScreen extends StatefulWidget {
+  const MovieListScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<MovieListScreen> createState() => _MovieListScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _MovieListScreenState extends State<MovieListScreen> {
   final ScrollController _scrollController = ScrollController();
 
   void _onScroll() {
